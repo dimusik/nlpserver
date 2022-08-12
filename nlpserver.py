@@ -117,24 +117,38 @@ def spacy_entities():
 		return jsonify(data)
 
 	if not 'lang' in params:
-		lang = 'en'
+		lang = 'ru_core_news_md'
 	else:
 		lang = params['lang']
 
-	nlp = spacy.load( lang )
-	doc = nlp( params['text'] )
-	data['entities']  = {}
-	
-	counters  = {}
+	disable_layers = []
+	if 'disable_layers' in params:
+		exclude_from_pipe = params['disable_layers'].split(',')
+
+	nlp = spacy.load(lang, disable = disable_layers)
+	doc = nlp(params['text'])
+
+	data = {
+        'entities': {},
+        'tokens': [],
+        'counters': {}
+    }
+
+	for token in doc:
+		data['tokens'].append({
+            token.tag_: {
+                'norm': token.norm_,
+                'lemma': token.lemma_,
+                'text': token.text,
+                'morphology': token.morph.to_dict()
+            }
+        })
+
 	for ent in doc.ents:
 		if not ent.label_ in data['entities']:
-			data['entities'][ent.label_] = dict()
-			counters[ent.label_] = 0
-		else:
-			counters[ent.label_] += 1
-	
-		data['entities'][ ent.label_ ][ counters[ent.label_] ] =  ent.text
-		#data['entities'][ent.label_].add( ent.text )
+			data['entities'][ent.label_] = []
+
+		data['entities'][ent.label_].append({ 'text': ent.text, 'lemma': ent.lemma_ })
 
 	return jsonify(data)
 

@@ -3,25 +3,21 @@ FROM python:3.8.5-slim-buster
 
 RUN apt-get update && \
     apt-get upgrade -y && \
-    apt-get install -y git && \
-    apt-get install -y supervisor
+    apt-get install -y git supervisor pkg-config python-numpy libicu-dev python3-pip
 
 # Set the working directory.
 WORKDIR /usr/src
-RUN git clone https://github.com/web64/nlpserver.git
+RUN git clone https://github.com/dimusik/nlpserver.git
 WORKDIR /usr/src/nlpserver
 
 # Install dependencies
-RUN apt-get -y install pkg-config && \
- 	apt-get -y install -y python-numpy libicu-dev && \
- 	apt-get -y install -y python3-pip && \
- 	python3 -m pip install -r requirements.txt
-
-# Download language models
-RUN polyglot download LANG:en
-
-RUN python3 -m spacy download en && \
-	python3 -m spacy download xx
+RUN python3 -m pip install -r requirements.txt && \
+    polyglot download LANG:en && \
+    polyglot download LANG:ru && \
+    python3 -m spacy download en_core_web_md && \
+    python3 -m spacy download ru_core_news_md && \
+    python3 -m spacy download ru_core_news_lg && \
+    python3 -m spacy download xx_ent_wiki_sm
 
 # Set supervisor config
 COPY nlpserver.conf /etc/supervisor/conf.d
