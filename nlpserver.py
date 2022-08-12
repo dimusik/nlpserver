@@ -130,8 +130,7 @@ def spacy_entities():
 
 	data = {
         'entities': {},
-        'tokens': [],
-        'counters': {}
+        'tokens': []
     }
 
 	for token in doc:

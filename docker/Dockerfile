@@ -7,6 +7,7 @@ RUN apt-get update && \
 
 # Set the working directory.
 WORKDIR /usr/src
+ARG CACHE_BURST=1
 RUN git clone https://github.com/dimusik/nlpserver.git
 WORKDIR /usr/src/nlpserver
 
