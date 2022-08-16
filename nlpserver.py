@@ -135,12 +135,11 @@ def spacy_entities():
 
 	for token in doc:
 		data['tokens'].append({
-            token.tag_: {
-                'norm': token.norm_,
-                'lemma': token.lemma_,
-                'text': token.text,
-                'morphology': token.morph.to_dict()
-            }
+			'tag': token.tag_,
+            'norm': token.norm_,
+            'lemma': token.lemma_,
+            'text': token.text,
+            'morphology': token.morph.to_dict()
         })
 
 	for ent in doc.ents:
