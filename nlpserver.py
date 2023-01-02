@@ -129,18 +129,18 @@ def spacy_entities():
 	doc = nlp(params['text'])
 
 	data = {
-        'entities': {},
-        'tokens': []
-    }
+        	'entities': {},
+        	'tokens': []
+    	}
 
 	for token in doc:
 		data['tokens'].append({
 			'tag': token.tag_,
-            'norm': token.norm_,
-            'lemma': token.lemma_,
-            'text': token.text,
-            'morphology': token.morph.to_dict()
-        })
+			'norm': token.norm_,
+			'lemma': token.lemma_,
+			'text': token.text,
+			'morphology': token.morph.to_dict()
+        	})
 
 	for ent in doc.ents:
 		if not ent.label_ in data['entities']:
